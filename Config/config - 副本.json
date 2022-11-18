@@ -1,0 +1,16 @@
+{
+    "comment": {
+        "_": "循环运行：查找新文件-读取文件-处理数据-输出文件-上传文件； 时间间隔 loopInterval进行一次循环；",
+        "signalCacheRootPath": "目标SignalMap文件的根目录，程序会在每次循环开始时自动查找当天的SignalMap.csv文件。如果没有当天的文件，会一直等待当天的问题出现。",
+        "path": "所有目录需要用双斜杠"
+    },
+    "loopInterval": 1,
+    "signalCacheRootPath": "C:\\D\\Platinum\\Platinum.Ultimate\\BrokerMini_Day\\Broker.3892@Cn.Com.60B.CPA@CnCom.Id107512.300_500\\SignalCache\\AIO@Test@CnCom.Id107512.300_500",
+    "messageClientIP": "220.231.191.82",
+    "messageClientPort": "11005",
+    "uploadName": "tp_Cn.Id107512.Stock",
+    "runningTime": [
+        ["093100", "113000"],
+        ["130000", "150000"]
+    ]
+}

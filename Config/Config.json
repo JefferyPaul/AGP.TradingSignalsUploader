@@ -1,0 +1,21 @@
+{
+    "comment": {
+        "_": "循环运行：查找新文件-读取文件-处理数据-输出文件-上传文件； 时间间隔 loopInterval进行一次循环；",
+        "signalCacheRootPath": "目标SignalMap文件的根目录，程序会在每次循环开始时自动查找当天的SignalMap.csv文件。如果没有当天的文件，会一直等待当天的问题出现。",
+        "path": "所有目录需要用双斜杠"
+    },
+    "name": "Cffex",
+    "loopInterval": 5,
+    "signalCacheRootPath": [
+        "C:\\D\\_workspace\\Platinum\\Platinum.Ultimate\\BrokerMini_DayNight\\Broker.3301@Test@Cffex.Signal\\SignalCache\\AIO@Test@CFFEX.20220830"
+    ],
+    "messageClientIP": "120.79.58.75",
+    "messageClientPort": "11005",
+    "uploadName": "tp_Cffex.AIO.20220830.cx",
+    "runningTime": [
+        ["093130", "113000"],
+        ["130100", "150000"]
+    ],
+	"targetLen": 287,
+	"stopTimeout": 60
+}
