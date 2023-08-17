@@ -72,11 +72,11 @@ class SignalUploader(ScheduleRunner):
         :param paths:
         :param logger:
         """
-        super(SignalUploader, self).__init__(running_time=running_time, loop_interval=30)
+        super(SignalUploader, self).__init__(running_time=running_time, loop_interval=30, logger=logger)
         self._uploader_thread: None or threading.Thread = None  # 只能运行一个 start线程
 
         self.root_paths = paths
-        self.logger = logger
+        # self.logger = logger
         self._upload_key = key
         self._mc_ip = mc_ip
         self._mc_port = mc_port

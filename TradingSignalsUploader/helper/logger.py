@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2020/6/19 16:41
 # @Author  : Jeffery Paul
-# @File    : logger.py
+# @File    : simpleLogger.py
 
 
 import logging
+from logging.handlers import TimedRotatingFileHandler
 import datetime
 import os
 
@@ -27,15 +28,20 @@ class MsgCounterHandler(logging.Handler):
 class MyLogger(logging.Logger):
 
     def __init__(
-            self, name, level=logging.INFO,
-            is_file=True, output_root=None,
-            file_name='log.txt', file_backup_count=15, file_level=logging.INFO,
+            self,
+            name, level=logging.INFO,
+            is_file=True,
+            output_root=None,
+            file_name='log.txt',
+            file_backup_count=15, file_level=logging.INFO,
             format_string='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             file_format_string='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     ):
         self.name = name
         self.level = level
+        self.file_name = file_name
         logging.Logger.__init__(self, self.name, self.level)
+
         # (1)stream handler
         self.__setStreamHandler__(format_string=format_string, level=level)
         # (2)file handler
@@ -50,9 +56,10 @@ class MyLogger(logging.Logger):
                 )
             if not os.path.isdir(path_file_output_root):
                 os.makedirs(path_file_output_root)
-            self.__setFileHandler__(output_root=path_file_output_root,
-                                    format_string=file_format_string,
+            self.output_root = path_file_output_root
+            self.__setFileHandler__(format_string=file_format_string,
                                     level=file_level, backup_count=file_backup_count)
+
         # (3)count handler
         self.__setMsgCountHandler__()
 
@@ -64,18 +71,26 @@ class MyLogger(logging.Logger):
         self.addHandler(stream_handler)
 
     # 文件输出
-    def __setFileHandler__(self, output_root, format_string, level, backup_count):
+    def __setFileHandler__(self, format_string, level, backup_count):
         # log 文件输出会冲突，隔日时
         # file_handler = handlers.TimedRotatingFileHandler(
         #     filename=file_name, backupCount=backup_count, when='D', encoding='utf-8'
         # )
-        path_file = os.path.join(output_root, 'log_%s.txt' % datetime.datetime.today().strftime('%Y%m%d'))
-        file_handler = logging.FileHandler(
-            path_file, mode='a', encoding='gb2312'
-        )
-        file_handler.setLevel(level)
-        file_handler.setFormatter(logging.Formatter(format_string))
-        self.addHandler(file_handler)
+
+        # old 不会分割文件
+        # path_file = os.path.join(output_root, 'log_%s.txt' % datetime.datetime.today().strftime('%Y%m%d'))
+        # file_handler = logging.FileHandler(
+        #     path_file, mode='a', encoding='gb2312'
+        # )
+        # file_handler.setLevel(level)
+        # file_handler.setFormatter(logging.Formatter(format_string))
+        # self.addHandler(file_handler)
+
+        path_file = os.path.join(self.output_root, self.file_name)
+        _th = TimedRotatingFileHandler(filename=path_file, when='MIDNIGHT', backupCount=backup_count, encoding='utf-8')
+        _th.setFormatter(logging.Formatter(format_string))
+        _th.setLevel(level)
+        self.addHandler(_th)
 
     # 统计状态个数
     def __setMsgCountHandler__(self):

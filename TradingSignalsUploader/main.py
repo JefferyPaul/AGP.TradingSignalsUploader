@@ -1,6 +1,7 @@
 import os
 import datetime
 import json
+from pprint import pprint
 
 import sys
 
@@ -27,7 +28,6 @@ def main():
     name = d_config['name']
     loop_interval = float(d_config['loopInterval'])  # 运行循环的时间间隔
     signal_cache_root_path = d_config['signalCacheRootPath']  # 目标文件的地址
-    assert type(signal_cache_root_path) is list
     message_client_ip = d_config['messageClientIP']  # 上传 ip
     message_client_port = d_config['messageClientPort']  # 上传 port
     upload_name = d_config['uploadName']
@@ -35,6 +35,20 @@ def main():
     target_len = int(d_config['targetLen'])
     stop_timeout = int(d_config['stopTimeout'])
 
+    # 判断并处理输入的路径
+    assert type(signal_cache_root_path) is list
+    if len(signal_cache_root_path) == 1:
+        # 判断输入的是否为根目录
+        _the_root_path = signal_cache_root_path[0]
+        assert os.path.isdir(_the_root_path)
+        _l = [os.path.join(_the_root_path, _) for _ in os.listdir(_the_root_path)]
+        if False in [os.path.isdir(_) for _ in _l]:
+            pass
+        else:
+            signal_cache_root_path = _l.copy()
+    pprint(signal_cache_root_path, indent=4)
+
+    # 转换运行时间的格式
     assert type(running_time) is list
     running_time = [
         [
@@ -44,6 +58,7 @@ def main():
         for i in running_time
     ]
 
+    # 启动
     logger = MyLogger(name=name, output_root=P_LOG_ROOT)
     logger.info('Started...  %s' % datetime.datetime.now().strftime('%Y%m%d %H:%M:%S'))
 

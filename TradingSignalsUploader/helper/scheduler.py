@@ -2,8 +2,7 @@ import datetime
 import time
 import abc
 import threading
-
-from . import my_logger
+from logging import Logger
 
 
 class ScheduleRunner:
@@ -12,11 +11,13 @@ class ScheduleRunner:
         调用 self._start 和 self._end 是可能出现阻塞的
     """
     def __init__(self,
+                 logger: Logger,
                  running_time=[[datetime.time(0, 0, 0), datetime.time(23, 59, 59)], ],
                  loop_interval=60 * 1):
         self._schedule_running_time = running_time
         self._schedule_in_running = False
         self._schedule_loop_interval = loop_interval
+        self.logger = logger
 
     @abc.abstractmethod
     def _start(self):
@@ -49,14 +50,14 @@ class ScheduleRunner:
             # 开始
             elif (not self._schedule_in_running) and is_in_running_time:
                 self._schedule_in_running = True
-                my_logger.info('开始运行...')
+                self.logger.info('开始运行...')
                 # t = threading.Thread(target=self._start)
                 # t.start()
                 self._start()
             # 结束运行
             else:
                 self._schedule_in_running = False
-                my_logger.info('暂停运行...')
+                self.logger.info('暂停运行...')
                 # t = threading.Thread(target=self._end)
                 # t.start()
                 self._end()

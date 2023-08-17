@@ -6,7 +6,7 @@ echo.
 cd %~dp0
 cd venv/Scripts
 call activate.bat
-start "Cffex" python ../../signalUploader/main.py
+start "Cffex" python ../../TradingSignalsUploader/main.py
 
 
 exit
